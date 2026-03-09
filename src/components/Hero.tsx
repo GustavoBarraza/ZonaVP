@@ -1,123 +1,241 @@
 import { useState, useEffect } from 'react';
 
+const PARTICLES = [
+  { left: 10, top: 20, delay: 0, duration: 8 },
+  { left: 25, top: 60, delay: 1.2, duration: 12 },
+  { left: 40, top: 15, delay: 2.5, duration: 7 },
+  { left: 55, top: 75, delay: 0.8, duration: 10 },
+  { left: 70, top: 35, delay: 3.1, duration: 9 },
+  { left: 85, top: 55, delay: 1.7, duration: 11 },
+  { left: 15, top: 80, delay: 4.2, duration: 6 },
+  { left: 90, top: 10, delay: 2.0, duration: 13 },
+  { left: 60, top: 90, delay: 0.5, duration: 8 },
+  { left: 35, top: 45, delay: 3.8, duration: 7 },
+  { left: 78, top: 70, delay: 1.5, duration: 10 },
+  { left: 5,  top: 50, delay: 2.9, duration: 9 },
+];
+
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleContactClick = () => {
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleLearnMoreClick = () => {
-    document.getElementById('acerca')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollTo = (id:string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <section
       id="inicio"
-      className="relative h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800 flex items-center justify-center overflow-hidden"
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 40%, #1a0a2e 70%, #0a0a1a 100%)' }}
     >
-      {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
-      </div>
+      {/* Spotlight effect */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(253, 200, 48, 0.12) 0%, transparent 70%)',
+        }}
+      />
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/50"></div>
-      
-      {/* Floating particles effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-30 animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`
-            }}
-          ></div>
-        ))}
-      </div>
-      
+      {/* Dot grid */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+      {/* Horizontal light line */}
+      <div
+        className="absolute left-0 right-0 opacity-20"
+        style={{
+          top: '38%',
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(253,200,48,0.8), transparent)',
+        }}
+      />
+
+      {/* Particles */}
+      {PARTICLES.map((p, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            width: i % 3 === 0 ? '3px' : '2px',
+            height: i % 3 === 0 ? '3px' : '2px',
+            background: i % 4 === 0 ? 'rgba(253,200,48,0.6)' : 'rgba(255,255,255,0.35)',
+            animation: `floatParticle ${p.duration}s ease-in-out ${p.delay}s infinite`,
+          }}
+        />
+      ))}
+
       {/* Content */}
-      <div 
-        className={`relative z-10 text-center text-white px-4 max-w-5xl transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+      <div
+        className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto"
+        style={{
+          transition: 'opacity 1.2s ease, transform 1.2s ease',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+        }}
       >
-        {/* Church icon/logo */}
-        <div className="mb-6 flex justify-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow">
-            <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L4 7v7c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-8-5zm0 2.18l6 3.75v6.07c0 4.41-2.88 8.55-6 9.73-3.12-1.18-6-5.32-6-9.73V7.93l6-3.75z"/>
-              <circle cx="12" cy="11" r="2"/>
-              <path d="M12 14c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4z"/>
+        {/* Cross icon */}
+        <div className="mb-8 flex justify-center">
+          <div
+            className="relative flex items-center justify-center"
+            style={{ width: 80, height: 80 }}
+          >
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(253,200,48,0.3) 0%, transparent 70%)',
+                animation: 'pulseGlow 3s ease-in-out infinite',
+              }}
+            />
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="20" y="4" width="8" height="40" rx="2" fill="url(#crossGrad)" />
+              <rect x="6" y="16" width="36" height="8" rx="2" fill="url(#crossGrad)" />
+              <defs>
+                <linearGradient id="crossGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#fde68a" />
+                  <stop offset="100%" stopColor="#f59e0b" />
+                </linearGradient>
+              </defs>
             </svg>
           </div>
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-          <span className="block mb-2">Bienvenido a</span>
-          <span className="block bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-2">
-            Casa de Oración
-          </span>
-          <span className="block bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-2">
-            Puerta del Cielo
-          </span>
-          <span className="block text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-blue-300 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Jesús es mi Esperanza
-          </span>
-        </h1>
-        
-        <p className="text-xl md:text-2xl lg:text-3xl mb-10 font-light text-gray-200 max-w-3xl mx-auto">
-          Tu lugar para crecer espiritualmente y conectarte con Dios
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button 
-            onClick={handleContactClick}
-            className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-10 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-green-500/50"
-          >
-            <span className="relative z-10">Contáctanos</span>
-            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-300"></div>
-          </button>
-          
-          <button 
-            onClick={handleLearnMoreClick}
-            className="group relative bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white px-10 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            <span className="relative z-10">Conoce más</span>
-          </button>
+        {/* Eyebrow label */}
+        <div
+          className="inline-block mb-5 px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase"
+          style={{
+            background: 'rgba(253,200,48,0.12)',
+            border: '1px solid rgba(253,200,48,0.3)',
+            color: '#fcd34d',
+            letterSpacing: '0.2em',
+          }}
+        >
+          Comunidad espiritual
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg className="w-6 h-6 text-white opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
+        <h1
+          className="font-bold leading-none mb-6"
+          style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }}
+        >
+          <span
+            className="block mb-1 text-white"
+            style={{
+              fontSize: 'clamp(1.25rem, 3vw, 1.75rem)',
+              fontWeight: 300,
+              letterSpacing: '0.15em',
+              opacity: 0.7,
+            }}
+          >
+            Bienvenido a
+          </span>
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #fef3c7, #fcd34d, #f59e0b)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            ZonaVP
+          </span>
+        </h1>
+
+        <p
+          className="mb-10 mx-auto"
+          style={{
+            fontSize: 'clamp(1rem, 2.5vw, 1.35rem)',
+            color: 'rgba(255,255,255,0.65)',
+            maxWidth: '560px',
+            lineHeight: 1.7,
+            fontWeight: 300,
+          }}
+        >
+          Tu lugar para crecer espiritualmente y conectarte con Dios
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <button
+            onClick={() => scrollTo('contacto')}
+            className="relative overflow-hidden font-semibold rounded-full transition-transform duration-200 hover:scale-105"
+            style={{
+              padding: '14px 40px',
+              background: 'linear-gradient(135deg, #16a34a, #15803d)',
+              color: '#fff',
+              fontSize: '1rem',
+              boxShadow: '0 0 30px rgba(22,163,74,0.4)',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            Contáctanos
+          </button>
+
+          <button
+            onClick={() => scrollTo('acerca')}
+            className="font-semibold rounded-full transition-all duration-200 hover:scale-105"
+            style={{
+              padding: '13px 40px',
+              background: 'transparent',
+              color: '#fff',
+              fontSize: '1rem',
+              border: '1px solid rgba(255,255,255,0.35)',
+              cursor: 'pointer',
+              backdropFilter: 'blur(4px)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)';
+            }}
+          >
+            Conoce más
+          </button>
         </div>
       </div>
 
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-8 left-1/2"
+        style={{
+          transform: 'translateX(-50%)',
+          animation: 'bounceDown 2s ease-in-out infinite',
+          opacity: 0.5,
+        }}
+      >
+        <svg width="24" height="24" fill="none" stroke="blac" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) translateX(0); }
-          25% { transform: translateY(-20px) translateX(10px); }
-          50% { transform: translateY(-40px) translateX(-10px); }
-          75% { transform: translateY(-20px) translateX(5px); }
+        @keyframes floatParticle {
+          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+          33%       { transform: translateY(-18px) translateX(8px); opacity: 0.7; }
+          66%       { transform: translateY(-30px) translateX(-6px); opacity: 0.4; }
         }
-        .animate-float {
-          animation: float linear infinite;
+        @keyframes pulseGlow {
+          0%, 100% { transform: scale(1); opacity: 0.6; }
+          50%       { transform: scale(1.4); opacity: 1; }
         }
-        .animate-pulse-slow {
-          animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        @keyframes bounceDown {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50%       { transform: translateX(-50%) translateY(8px); }
         }
       `}</style>
     </section>
   );
 }
-

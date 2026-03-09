@@ -6,21 +6,20 @@ export default function Header() {
   const navLinks = [
     { href: '#inicio', label: 'Inicio' },
     { href: '#acerca', label: 'Acerca' },
-    { href: '#contacto', label: 'Contacto' },
-    { href: '#donaciones', label: 'Donaciones' },
+    { href: '#contacto', label: 'Contacto' }
   ];
 
   return (
-    <header className="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-100">
+    <header className="bg-black/10 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-green-600 to-green-700 flex items-center justify-center text-white font-bold shadow-lg">
               I
             </div>
             <h1 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 line-clamp-1">
-              Iglesia Casa de Oración Puerta del Cielo
+              ZonaVP
             </h1>
           </div>
 

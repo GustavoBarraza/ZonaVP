@@ -45,12 +45,12 @@ function Events() {
   ];
 
   return (
-    <section id="eventos" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <section id="eventos" className="py-20 bg-linear-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-block mb-4">
-            <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-full shadow-lg">
+            <div className="flex items-center justify-center w-16 h-16 bg-linear-to-br from-green-500 to-green-700 rounded-full shadow-lg">
               <Calendar className="w-8 h-8 text-white" />
             </div>
           </div>
@@ -72,17 +72,17 @@ function Events() {
                 className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
               >
                 {/* Gradient top bar */}
-                <div className={`h-2 bg-gradient-to-r ${event.color}`}></div>
+                <div className={`h-2 bg-linear-to-r ${event.color}`}></div>
                 
                 <div className="p-6">
                   {/* Icon */}
-                  <div className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br ${event.color} rounded-xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`inline-flex items-center justify-center w-14 h-14 bg-linear-to-br ${event.color} rounded-xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <IconComponent className="w-7 h-7 text-white" />
                   </div>
 
                   {/* Day badge */}
                   <div className="inline-block mb-3">
-                    <span className={`px-3 py-1 text-sm font-semibold text-white bg-gradient-to-r ${event.color} rounded-full`}>
+                    <span className={`px-3 py-1 text-sm font-semibold text-white bg-linear-to-r ${event.color} rounded-full`}>
                       {event.day}
                     </span>
                   </div>
@@ -105,7 +105,7 @@ function Events() {
                 </div>
 
                 {/* Hover effect overlay */}
-                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${event.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
+                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-lineart-to-r ${event.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
               </div>
             );
           })}
@@ -118,7 +118,7 @@ function Events() {
           </p>
           <button 
             onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/50"
+            className="bg-linear-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/50"
           >
             Contáctanos
           </button>

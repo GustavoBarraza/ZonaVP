@@ -3,8 +3,6 @@ import Hero from './components/Hero';
 import About from './pages/About';
 import Events from './pages/Events';
 import Contact from './pages/Contact';
-import Countdown from './components/Countdown';
-
 function App() {
   return (
     <>
@@ -12,7 +10,6 @@ function App() {
       <Hero/>
       <About/>
       <Events/>
-      <Countdown/>
       <Contact/>
     </>
   );
