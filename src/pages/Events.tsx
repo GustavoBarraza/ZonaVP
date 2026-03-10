@@ -2,21 +2,26 @@ export default function Events() {
 
   const services = [
     {
+      id: 1,
       title: "Teens",
       image: "/Img/Teens.png",
     },
     {
+      id: 2,
       title: "Youngs",
       image: "/Img/Youngs.png",
     },
     {
+      id: 3,
       title: "Grupos de Vida",
       image: "/Img/Grupos.png",
     },
   ];
 
   const scrollToContact = () => {
-    document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("contacto")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -55,10 +60,10 @@ export default function Events() {
       {/* Cards */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
 
-        {services.map((service, index) => (
+        {services.map((service) => (
 
           <div
-            key={index}
+            key={service.id}
             className="group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
             style={{
               aspectRatio: "3/4",
@@ -112,6 +117,22 @@ export default function Events() {
           </div>
 
         ))}
+
+      </div>
+
+      {/* Botón contacto */}
+      <div className="text-center mt-16">
+
+        <button
+          onClick={scrollToContact}
+          className="px-8 py-3 rounded-xl font-bold text-black transition"
+          style={{
+            background: "#a3e635",
+            boxShadow: "0 8px 25px rgba(163,230,53,0.35)",
+          }}
+        >
+          Contáctanos
+        </button>
 
       </div>
 
