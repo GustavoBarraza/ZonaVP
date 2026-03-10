@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const PARTICLES = [
   { left: 10, top: 20, delay: 0, duration: 8 },
@@ -12,31 +12,61 @@ const PARTICLES = [
   { left: 60, top: 90, delay: 0.5, duration: 8 },
   { left: 35, top: 45, delay: 3.8, duration: 7 },
   { left: 78, top: 70, delay: 1.5, duration: 10 },
-  { left: 5,  top: 50, delay: 2.9, duration: 9 },
+  { left: 5, top: 50, delay: 2.9, duration: 9 },
+];
+
+const SLIDES = [
+  {
+    subtitle: "Bienvenido a",
+    title: "ZonaVP",
+    text: "Tu lugar para crecer espiritualmente y conectarte con Dios",
+  },
+  {
+    subtitle: "Crece en",
+    title: "Fe",
+    text: "Descubre un espacio para fortalecer tu relación con Dios",
+  },
+  {
+    subtitle: "Conecta con",
+    title: "La Comunidad",
+    text: "Personas que comparten tu fe y tu propósito",
+  },
 ];
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
+    setIsVisible(true);
   }, []);
 
-  const scrollTo = (id:string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % SLIDES.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <section
       id="inicio"
       className="relative h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 40%, #1a0a2e 70%, #0a0a1a 100%)' }}
+      style={{
+        background:
+          "linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 40%, #1a0a2e 70%, #0a0a1a 100%)",
+      }}
     >
-      {/* Spotlight effect */}
+      {/* Spotlight */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(253, 200, 48, 0.12) 0%, transparent 70%)',
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 40%, rgba(253, 200, 48, 0.12) 0%, transparent 70%)",
         }}
       />
 
@@ -44,18 +74,20 @@ export default function Hero() {
       <div
         className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
+          backgroundImage:
+            "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
         }}
       />
 
-      {/* Horizontal light line */}
+      {/* Light line */}
       <div
         className="absolute left-0 right-0 opacity-20"
         style={{
-          top: '38%',
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(253,200,48,0.8), transparent)',
+          top: "38%",
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent, rgba(253,200,48,0.8), transparent)",
         }}
       />
 
@@ -63,13 +95,16 @@ export default function Hero() {
       {PARTICLES.map((p, i) => (
         <div
           key={i}
-          className="absolute rounded-full"
+          className="absolute rounded-full pointer-events-none"
           style={{
             left: `${p.left}%`,
             top: `${p.top}%`,
-            width: i % 3 === 0 ? '3px' : '2px',
-            height: i % 3 === 0 ? '3px' : '2px',
-            background: i % 4 === 0 ? 'rgba(253,200,48,0.6)' : 'rgba(255,255,255,0.35)',
+            width: i % 3 === 0 ? "3px" : "2px",
+            height: i % 3 === 0 ? "3px" : "2px",
+            background:
+              i % 4 === 0
+                ? "rgba(253,200,48,0.6)"
+                : "rgba(255,255,255,0.35)",
             animation: `floatParticle ${p.duration}s ease-in-out ${p.delay}s infinite`,
           }}
         />
@@ -79,161 +114,89 @@ export default function Hero() {
       <div
         className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto"
         style={{
-          transition: 'opacity 1.2s ease, transform 1.2s ease',
+          transition: "opacity 1s ease, transform 1s ease",
           opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+          transform: isVisible ? "translateY(0)" : "translateY(20px)",
         }}
-      >
-        {/* Cross icon */}
-        <div className="mb-8 flex justify-center">
-          <div
-            className="relative flex items-center justify-center"
-            style={{ width: 80, height: 80 }}
-          >
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: 'radial-gradient(circle, rgba(253,200,48,0.3) 0%, transparent 70%)',
-                animation: 'pulseGlow 3s ease-in-out infinite',
-              }}
-            />
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <rect x="20" y="4" width="8" height="40" rx="2" fill="url(#crossGrad)" />
-              <rect x="6" y="16" width="36" height="8" rx="2" fill="url(#crossGrad)" />
-              <defs>
-                <linearGradient id="crossGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#fde68a" />
-                  <stop offset="100%" stopColor="#f59e0b" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-        </div>
+      >   
 
-        {/* Eyebrow label */}
-        <div
-          className="inline-block mb-5 px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase"
-          style={{
-            background: 'rgba(253,200,48,0.12)',
-            border: '1px solid rgba(253,200,48,0.3)',
-            color: '#fcd34d',
-            letterSpacing: '0.2em',
-          }}
-        >
-          Comunidad espiritual
-        </div>
-
+        {/* Title */}
         <h1
           className="font-bold leading-none mb-6"
-          style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }}
+          style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
         >
+          {/* FIX 1: Subtitle now rendered (was missing before) */}
           <span
-            className="block mb-1 text-white"
-            style={{
-              fontSize: 'clamp(1.25rem, 3vw, 1.75rem)',
-              fontWeight: 300,
-              letterSpacing: '0.15em',
-              opacity: 0.7,
-            }}
+            className="block font-light tracking-widest text-white/60 mb-2"
+            style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)" }}
           >
-            Bienvenido a
+            {SLIDES[index].subtitle}
           </span>
+
           <span
             style={{
-              background: 'linear-gradient(135deg, #fef3c7, #fcd34d, #f59e0b)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              background: "linear-gradient(135deg,#d9ff7a,#A6E22E,#6fdc2b)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              filter: "drop-shadow(0 0 10px rgba(166,226,46,0.7))",
             }}
           >
-            ZonaVP
+            {SLIDES[index].title}
           </span>
         </h1>
 
-        <p
-          className="mb-10 mx-auto"
-          style={{
-            fontSize: 'clamp(1rem, 2.5vw, 1.35rem)',
-            color: 'rgba(255,255,255,0.65)',
-            maxWidth: '560px',
-            lineHeight: 1.7,
-            fontWeight: 300,
-          }}
-        >
-          Tu lugar para crecer espiritualmente y conectarte con Dios
+        {/* Text */}
+        <p className="mb-10 mx-auto text-lg text-white/70 max-w-xl">
+          {SLIDES[index].text}
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
-            onClick={() => scrollTo('contacto')}
-            className="relative overflow-hidden font-semibold rounded-full transition-transform duration-200 hover:scale-105"
-            style={{
-              padding: '14px 40px',
-              background: 'linear-gradient(135deg, #16a34a, #15803d)',
-              color: '#fff',
-              fontSize: '1rem',
-              boxShadow: '0 0 30px rgba(22,163,74,0.4)',
-              border: 'none',
-              cursor: 'pointer',
-            }}
+            onClick={() => scrollTo("contacto")}
+            className="px-10 py-3 rounded-full font-semibold bg-green-600 hover:bg-green-700 transition"
           >
             Contáctanos
           </button>
 
           <button
-            onClick={() => scrollTo('acerca')}
-            className="font-semibold rounded-full transition-all duration-200 hover:scale-105"
-            style={{
-              padding: '13px 40px',
-              background: 'transparent',
-              color: '#fff',
-              fontSize: '1rem',
-              border: '1px solid rgba(255,255,255,0.35)',
-              cursor: 'pointer',
-              backdropFilter: 'blur(4px)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)';
-            }}
+            onClick={() => scrollTo("acerca")}
+            className="px-10 py-3 rounded-full font-semibold border border-white/40 hover:bg-white/10 transition"
           >
             Conoce más
           </button>
         </div>
+
+        {/* Indicators */}
+        <div className="flex justify-center gap-3 mt-8">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`w-3 h-3 rounded-full transition ${
+                index === i ? "bg-yellow-400" : "bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div
-        className="absolute bottom-8 left-1/2"
-        style={{
-          transform: 'translateX(-50%)',
-          animation: 'bounceDown 2s ease-in-out infinite',
-          opacity: 0.5,
-        }}
-      >
-        <svg width="24" height="24" fill="none" stroke="blac" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+      {/* Scroll arrow */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-50 animate-bounce">
+        <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+          <path strokeWidth="1.5" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
 
       <style>{`
         @keyframes floatParticle {
-          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-          33%       { transform: translateY(-18px) translateX(8px); opacity: 0.7; }
-          66%       { transform: translateY(-30px) translateX(-6px); opacity: 0.4; }
+          0%,100%{transform:translateY(0)}
+          50%{transform:translateY(-25px)}
         }
+
         @keyframes pulseGlow {
-          0%, 100% { transform: scale(1); opacity: 0.6; }
-          50%       { transform: scale(1.4); opacity: 1; }
-        }
-        @keyframes bounceDown {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50%       { transform: translateX(-50%) translateY(8px); }
+          0%,100%{transform:scale(1);opacity:.6}
+          50%{transform:scale(1.4);opacity:1}
         }
       `}</style>
     </section>
