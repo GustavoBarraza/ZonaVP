@@ -1,9 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=Permanent+Marker&display=swap');
 
-.font-navbar {
-  font-family: 'permanent marker', cursive;
-}
 
 body {
   @apply  text-gray-800 antialiased font-sans;

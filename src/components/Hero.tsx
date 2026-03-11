@@ -1,204 +1,162 @@
-import { useState, useEffect } from "react";
-
-const PARTICLES = [
-  { left: 10, top: 20, delay: 0, duration: 8 },
-  { left: 25, top: 60, delay: 1.2, duration: 12 },
-  { left: 40, top: 15, delay: 2.5, duration: 7 },
-  { left: 55, top: 75, delay: 0.8, duration: 10 },
-  { left: 70, top: 35, delay: 3.1, duration: 9 },
-  { left: 85, top: 55, delay: 1.7, duration: 11 },
-  { left: 15, top: 80, delay: 4.2, duration: 6 },
-  { left: 90, top: 10, delay: 2.0, duration: 13 },
-  { left: 60, top: 90, delay: 0.5, duration: 8 },
-  { left: 35, top: 45, delay: 3.8, duration: 7 },
-  { left: 78, top: 70, delay: 1.5, duration: 10 },
-  { left: 5, top: 50, delay: 2.9, duration: 9 },
-];
+import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 const SLIDES = [
   {
+    image: "/Img/Young.jpeg",
     subtitle: "Bienvenido a",
     title: "ZonaVP",
-    text: "Tu lugar para crecer espiritualmente y conectarte con Dios",
+    text: "Tu lugar para crecer espiritualmente y conectarte con Dios.",
   },
   {
+    image: "/Img/Logo-zonavp.png",
     subtitle: "Crece en",
-    title: "Fe",
-    text: "Descubre un espacio para fortalecer tu relación con Dios",
+    title: "Fe y comunidad",
+    text: "Descubre un espacio para fortalecer tu relación con Dios.",
   },
-  {
-    subtitle: "Conecta con",
-    title: "La Comunidad",
-    text: "Personas que comparten tu fe y tu propósito",
-  },
-];
+]
+
+const DURATION = 7000
 
 export default function Hero() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(0)
+  const [progress, setProgress] = useState(0)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const resetTimer = (nextIndex?: number) => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    setProgress(0)
+
+    if (typeof nextIndex === "number") {
+      setIndex(nextIndex)
+    }
+
+    const start = Date.now()
+    intervalRef.current = window.setInterval(() => {
+      const elapsed = Date.now() - start
+      const pct = Math.min(100, (elapsed / DURATION) * 100)
+
+      if (pct >= 100) {
+        clearInterval(intervalRef.current!)
+        setIndex((i) => (i + 1) % SLIDES.length)
+        resetTimer()
+      } else {
+        setProgress(pct)
+      }
+    }, 30)
+  }
 
   useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % SLIDES.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
+    resetTimer()
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+
+  const slide = SLIDES[index]
 
   return (
-    <section
-      id="inicio"
-      className="relative h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 40%, #1a0a2e 70%, #0a0a1a 100%)",
-      }}
-    >
-      {/* Spotlight */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 40%, rgba(253, 200, 48, 0.12) 0%, transparent 70%)",
-        }}
-      />
+    <section id="inicio" className="relative h-screen overflow-hidden">
 
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      {/* Light line */}
-      <div
-        className="absolute left-0 right-0 opacity-20"
-        style={{
-          top: "38%",
-          height: "1px",
-          background:
-            "linear-gradient(90deg, transparent, rgba(253,200,48,0.8), transparent)",
-        }}
-      />
-
-      {/* Particles */}
-      {PARTICLES.map((p, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            left: `${p.left}%`,
-            top: `${p.top}%`,
-            width: i % 3 === 0 ? "3px" : "2px",
-            height: i % 3 === 0 ? "3px" : "2px",
-            background:
-              i % 4 === 0
-                ? "rgba(253,200,48,0.6)"
-                : "rgba(255,255,255,0.35)",
-            animation: `floatParticle ${p.duration}s ease-in-out ${p.delay}s infinite`,
-          }}
+      {/* ── Imágenes ── */}
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={index}
+          src={slide.image}
+          alt={slide.title}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full object-cover"
         />
-      ))}
+      </AnimatePresence>
 
-      {/* Content */}
+      {/* ── Overlay oscuro ── */}
       <div
-        className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto"
+        className="absolute inset-0"
         style={{
-          transition: "opacity 1s ease, transform 1s ease",
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? "translateY(0)" : "translateY(20px)",
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.2) 100%)",
         }}
-      >   
+      />
 
-        {/* Title */}
-        <h1
-          className="font-bold leading-none mb-6"
-          style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
-        >
-          {/* FIX 1: Subtitle now rendered (was missing before) */}
-          <span
-            className="block font-light tracking-widest text-white/60 mb-2"
-            style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)" }}
+      {/* ── Texto ── */}
+      <div className="relative z-10 h-full flex flex-col justify-end pb-28 px-8 md:px-20 max-w-4xl">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {SLIDES[index].subtitle}
-          </span>
+            <span
+              className="block text-white/50 uppercase tracking-[0.3em] mb-2 font-light"
+              style={{ fontSize: "0.75rem", fontFamily: "'Courier New', monospace" }}
+            >
+              {slide.subtitle}
+            </span>
 
-          <span
-            style={{
-              background: "linear-gradient(135deg,#d9ff7a,#A6E22E,#6fdc2b)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0 0 10px rgba(166,226,46,0.7))",
-            }}
-          >
-            {SLIDES[index].title}
-          </span>
-        </h1>
+            <h1
+              className="text-white font-bold leading-none mb-4"
+              style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
+            >
+              {slide.title}
+            </h1>
 
-        {/* Text */}
-        <p className="mb-10 mx-auto text-lg text-white/70 max-w-xl">
-          {SLIDES[index].text}
-        </p>
+            <p className="text-white/80 max-w-xl leading-relaxed text-lg md:text-xl">
+              {slide.text}
+            </p>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => scrollTo("contacto")}
-            className="px-10 py-3 rounded-full font-semibold bg-green-600 hover:bg-green-700 transition"
-          >
-            Contáctanos
-          </button>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => scrollTo("eventos")}
+                className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-6 py-3 text-sm font-semibold text-black shadow-sm transition hover:bg-emerald-300"
+              >
+                Ver eventos
+              </button>
 
-          <button
-            onClick={() => scrollTo("acerca")}
-            className="px-10 py-3 rounded-full font-semibold border border-white/40 hover:bg-white/10 transition"
-          >
-            Conoce más
-          </button>
-        </div>
+              <button
+                type="button"
+                onClick={() => scrollTo("acerca")}
+                className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:border-white"
+              >
+                Conocer más
+              </button>
+            </div>
 
-        {/* Indicators */}
-        <div className="flex justify-center gap-3 mt-8">
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-3 h-3 rounded-full transition ${
-                index === i ? "bg-yellow-400" : "bg-white/40"
-              }`}
-            />
-          ))}
-        </div>
+            <div className="mt-10 flex items-center justify-between gap-4">
+              <div className="flex gap-2">
+                {SLIDES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    aria-label={`Slide ${idx + 1}`}
+                    onClick={() => resetTimer(idx)}
+                    className={`h-2 w-2 rounded-full transition-opacity ${
+                      idx === index ? "bg-white" : "bg-white/40"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex-1 h-2 overflow-hidden rounded-full bg-white/20">
+                <div
+                  className="h-full bg-emerald-400"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-
-      {/* Scroll arrow */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-50 animate-bounce">
-        <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
-          <path strokeWidth="1.5" d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
-
-      <style>{`
-        @keyframes floatParticle {
-          0%,100%{transform:translateY(0)}
-          50%{transform:translateY(-25px)}
-        }
-
-        @keyframes pulseGlow {
-          0%,100%{transform:scale(1);opacity:.6}
-          50%{transform:scale(1.4);opacity:1}
-        }
-      `}</style>
     </section>
-  );
+  )
 }
+     
